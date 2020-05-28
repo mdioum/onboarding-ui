@@ -1,0 +1,8 @@
+<tc-dropdown class="item">
+  <tc-dropdown-button>
+    <tc-icon [iconClass]="'icofont icofont-notification'" [tcFontSize]="24"></tc-icon>
+    <tc-badge [tcShape]="500" [view]="'info'" *ngIf="httpSv?.nbNotifications" [size]="'sm'">
+      {{ httpSv?.nbNotifications }}
+    </tc-badge>
+  </tc-dropdown-button>
+</tc-dropdown>

@@ -1,0 +1,28 @@
+<div class="error-card">
+  <div class="icon-block">
+    <i class="icofont-bulb-alt"></i>
+  </div>
+
+  <div class="card-content">
+    <div class="text-block mb-5">
+      <h3 class="title">Malaw</h3>
+
+      <h6 class="sub-title">Sonatel</h6>
+
+      <p class="error-message">
+        <tc-alert
+                  [view]="'success'"
+                  [iconColor]="'rgba(124,219,134, .8)'"
+                  [beforeIcon]="'icofont-info-circle'"
+                  class="mb-4 animated fadeInDown delay-01s"
+        >
+          Demande envoyée avec succès
+        </tc-alert>
+      </p>
+    </div>
+
+    <a [routerLink]="(httpSv.username && httpSv.password)? '/horizontal/request-rejected' : '/horizontal/requests'" [view]="'info'" tc-button [beforeIcon]="'icofont-ui-home'" [block]="true">
+      Retour
+    </a>
+  </div>
+</div>

@@ -1,0 +1,192 @@
+<div class="row">
+  <div class="col-12 col-md-4 request" *ngFor="let requete of requetes?.data">
+    <tc-card [title]="requete?.demandeur?.entite+' - '+requete?.demandeur?.structure" [align]="'center'" class="mb-md-0">
+      <div class="row">
+        <div class="col-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="mr-2" [tcFontSize]="50" [tcColor]="'#6e40d8'">{{requete?.ressource?.cpu}}</div>
+            <div [tcColor]="'#8f8f90'">
+              <div [tcFontSize]="20">Cores</div>
+              <div>CPU</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="mr-2" [tcFontSize]="50" [tcColor]="'#6e40d8'">{{getMemory(requete?.ressource?.memory)}}</div>
+            <div [tcColor]="'#8f8f90'">
+              <div [tcFontSize]="20">Gi</div>
+              <div>Memory</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="mr-2" [tcFontSize]="50" [tcColor]="'#6e40d8'">{{getMemory(requete?.ressource?.storage)}}</div>
+            <div [tcColor]="'#8f8f90'">
+              <div [tcFontSize]="20">Gi</div>
+              <div>Disque</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <hr class="mt-4 mb-4">
+
+      <tc-badge [outline]="true" [view]="'info'">Projet <br>{{requete?.projet?.nom}}</tc-badge>
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <ul class="list-unstyled text-left">
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">{{requete?.demandeur?.prenom}} {{requete?.demandeur?.nom}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">{{requete?.demandeur?.telephone}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">{{requete?.demandeur?.email}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Business unit : {{requete?.projet?.businessunit}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Application : {{requete?.projet?.application}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Criticité : {{requete?.projet?.criticity}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Backup : {{requete?.projet?.backup}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Username admin : {{requete?.projet?.loginAdmin}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Email admin : {{requete?.projet?.emailAdmin}}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-6">
+          <tc-card [title]="'Environnements'" [padding]="0">
+            <tc-list [timeline]="true">
+              <tc-list-item *ngFor="let env of requete?.environnements">
+                <tc-icon
+                        tc-list-icon
+                        [padding]="'7px'"
+                        [tcShape]="500"
+                        [iconClass]="'icofont-paper-plane'"
+                        [tcColor]="'#fff'"
+                        [tcBgColor]="'#4a505c'"
+                ></tc-icon>
+                <span tc-list-line>{{env}}</span>
+              </tc-list-item>
+            </tc-list>
+          </tc-card>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-12">
+          <button tc-button [view]="'success'" class="mb-3 icofont-pull-left" (click)="openModal(modalBody, 'Validation', modalFooter, { closeButton: true, overlayClose: false }); requeteSelected=requete; modalContent = 'Vous êtes sur le point de valider la demande suivante:'; action='accepted'; postMessage = ''">Accepter</button>
+          <button tc-button [view]="'error'" class="mb-3 icofont-pull-right" (click)="openModal(modalBody, 'Refus', modalFooter, { closeButton: true, overlayClose: false }); requeteSelected=requete; modalContent = 'Vous êtes sur le point de rejeter la demande suivante:'; action='rejected'; postMessage = ''">Rejeter</button>
+        </div>
+      </div>
+    </tc-card>
+  </div>
+</div>
+
+<ng-container>
+  <ng-template #modalHeader>
+    <h2 class="title">Modal title</h2>
+    <div class="actions">
+      <tc-badge [view]="'warning'">New</tc-badge>
+    </div>
+  </ng-template>
+
+  <ng-template #modalBody>
+    <p>
+      {{modalContent}}
+    </p>
+    <div class="row">
+      <div class="col-4">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="mr-2" [tcFontSize]="50" [tcColor]="'#000000'">{{requeteSelected?.ressource?.cpu}}</div>
+          <div [tcColor]="'#8f8f90'">
+            <div [tcFontSize]="20">Cores</div>
+            <div>CPU</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="mr-2" [tcFontSize]="50" [tcColor]="'#000000'">{{getMemory(requeteSelected?.ressource?.memory)}}</div>
+          <div [tcColor]="'#8f8f90'">
+            <div [tcFontSize]="20">Gi</div>
+            <div>Memory</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="mr-2" [tcFontSize]="50" [tcColor]="'#000000'">{{getMemory(requeteSelected?.ressource?.storage)}}</div>
+          <div [tcColor]="'#8f8f90'">
+            <div [tcFontSize]="20">Gi</div>
+            <div>Disque</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <ul class="list-unstyled text-left">
+          <li class="d-flex align-items-center pt-2 pb-2">
+            <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+            <span class="ml-1">Entité: {{requeteSelected?.demandeur?.entite}}</span>
+          </li>
+          <li class="d-flex align-items-center pt-2 pb-2">
+            <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+            <span class="ml-1">Structure: {{requeteSelected?.demandeur?.structure}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <tc-form-group *ngIf="action === 'rejected'">
+      <tc-textarea [readonly]="(postMessage === 'success')?true : false" [placeholder]="'Commentaire'" [(ngModel)]="message" [height]="100" [tcShape]="6"></tc-textarea>
+    </tc-form-group>
+    <tc-alert
+            *ngIf="postMessage === 'success'"
+            [view]="'success'"
+            [iconColor]="'rgba(124,219,134, .8)'"
+            [beforeIcon]="'icofont-info-circle'"
+            class="mb-4 animated fadeInDown delay-01s"
+    >
+      {{(action === 'rejected')?'Demande rejetée':'Ressource et environnements créés avec succès'}}
+
+    </tc-alert>
+    <tc-alert
+            *ngIf="postMessage === 'error'"
+            [view]="'error'"
+            [iconColor]="'#ff7675'"
+            [beforeIcon]="'icofont-info-circle'"
+            class="mb-4 animated fadeInDown delay-01s"
+    >
+      {{(action === 'rejected')?'Erreur':'Erreur de création'}}
+    </tc-alert>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div class="actions justify-content-between" *ngIf="postMessage === ''">
+      <button tc-button [disabled]="!message && action === 'rejected'" [view]="'success'" [outline]="true" [load]="loadingLabelForm" (click)="validateOrReject()">Valider</button>
+      <button tc-button [view]="'error'" [outline]="true" (click)="closeModal()">Annuler</button>
+    </div>
+  </ng-template>
+</ng-container>

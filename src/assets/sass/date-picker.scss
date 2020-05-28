@@ -1,0 +1,94 @@
+@import "./variables";
+
+$_bg: (
+  default: rgba(#4a505c, 0.08),
+  hover: rgba(#4a505c, 0.08),
+  focus: #fff,
+  disabled: rgba(#ccc, 0.1)
+);
+
+$_border: (
+  default: rgba(#4a505c, 0.08),
+  hover: rgba(#4a505c, 0.08),
+  focus: rgba(#4a505c, 0.08),
+  disabled: rgba(#ccc, 0.5)
+);
+
+$_color: (
+  default: #4a505c,
+  hover: #4a505c,
+  focus: #4a505c,
+  disabled: #bdbdbd
+);
+
+$_module-rem: $module-rem;
+$_placeholder-color: #4a505c;
+$_border-style: solid;
+$_border-width: 1px;
+$_fs: 1rem;
+$_lh: $_module-rem * 2 / $_fs;
+$_padding-h: $_module-rem * 2;
+$_padding-v: $_module-rem;
+$_shape: 20px;
+$_animation: $animation;
+
+.ant-input {
+  background-color: map-get($_bg, default);
+  background-clip: padding-box;
+  border: $_border-width $_border-style map-get($_border, default);
+  border-radius: $_shape;
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  line-height: $_lh;
+  min-height: (4 * $module);
+  transition: background-color 0.2s $_animation, border 0.2s $_animation, color 0.2s $_animation;
+  will-change: background-color, border, color;
+  font: inherit;
+  font-weight: 400;
+  margin: -$_border-width 0;
+  outline: none;
+  padding: $_padding-v ($_padding-h + 0.2rem);
+  width: 100%;
+  @media #{$max1199} {
+    max-width: 100%;
+  }
+
+  &:hover {
+    background-color: map-get($_bg, hover) !important;
+    border-color: map-get($_border, hover) !important;
+    outline: none !important;
+  }
+  &:disabled {
+    background-color: map-get($_bg, disabled) !important;
+    border-color: map-get($_border, disabled) !important;
+  }
+  &:focus {
+    outline: none !important;
+  }
+}
+
+.ant-calendar-picker,
+.ant-calendar-picker-input {
+  max-width: 100%;
+  outline: none;
+
+  :not(.ant-input-disabled),
+  &:focus {
+    border: none;
+    box-shadow: none;
+    outline: none !important;
+  }
+}
+
+.ant-calendar-picker-clear {
+  align-items: center;
+  display: flex;
+  color: rgba(#4a505c, .5);
+  background: #fff;
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+}

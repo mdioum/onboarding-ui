@@ -1,0 +1,452 @@
+<tc-card class="mb-0" [title]="''" [padding]="'20px 0'" *ngIf="requetes">
+  <tc-table [rows]="requetes" [pagination]="true" [itemsPerPage]="10" [hovered]="true" [search]="true" *ngIf="requetes">
+    <tc-table-col [columnTitle]="'Entité'" [columnName]="'entite'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'Structure'" [columnName]="'structure'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'Projet'" [columnName]="'projet'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'CPU'" [columnName]="'cpu'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" >{{ value?.ressource?.cpu + ' core' }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Mémoire'" [columnName]="'memory'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" >{{ value?.ressource?.memory }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Disque'" [columnName]="'storage'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" >{{ value?.ressource?.storage }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Editer'" [columnName]="'info'">
+      <ng-template #tableTDTemplate let-value>
+        <button tc-button [view]="'warning'" class="mb-3 icofont-pull-left" (click)="openModal(modalBody, 'Modification', modalFooter, { width: '100%', closeButton: true }, value)">Modifier</button>
+      </ng-template>
+    </tc-table-col>
+  </tc-table>
+</tc-card>
+
+
+<ng-container>
+  <ng-template #modalHeader>
+    <h2 class="title">Modal title</h2>
+    <div class="actions">
+      <tc-badge [view]="'warning'">New</tc-badge>
+    </div>
+  </ng-template>
+
+  <ng-template #modalBody>
+    <form  [formGroup]="labelForm" (ngSubmit)="sendLabelForm(labelForm.valid)" novalidate>
+      <div class="row"  *ngIf="requestSelected">
+        <div class="col-12 col-xl-4">
+          <tc-card [title]="'Information du demandeur'">
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.entite.touched && labelForm.controls.entite.invalid"
+                  >Entité <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.entite.touched && labelForm.controls.entite.invalid)"
+                  >Entité <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="entite" [(ngModel)]="requestSelected.demandeur.entite"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.structure.touched && labelForm.controls.structure.invalid"
+                  >Structure <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.structure.touched && labelForm.controls.structure.invalid)"
+                  >Structure <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="structure" [(ngModel)]="requestSelected.demandeur.structure"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.email.touched && labelForm.controls.email.invalid"
+                  >Email <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.email.touched && labelForm.controls.email.invalid)"
+                  >Email <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input [type]="'email'" formControlName="email" [(ngModel)]="requestSelected.demandeur.email"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.login.touched && labelForm.controls.login.invalid"
+                  >Login <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.login.touched && labelForm.controls.login.invalid)"
+                  >Login <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="login" [(ngModel)]="requestSelected.demandeur.login"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.prenom.touched && labelForm.controls.prenom.invalid)"
+                  >Prénom :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="prenom" [(ngModel)]="requestSelected.demandeur.prenom"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Nom :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="nom" [(ngModel)]="requestSelected.demandeur.nom"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Téléphone :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="telephone" [(ngModel)]="requestSelected.demandeur.telephone"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+          </tc-card>
+        </div>
+
+        <div class="col-12 col-xl-4">
+          <tc-card [title]="'Projet'">
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.projet.touched && labelForm.controls.projet.invalid"
+                  >Nom du projet <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.projet.touched && labelForm.controls.projet.invalid)"
+                  >Nom du projet <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="projet" [(ngModel)]="requestSelected.projet.nom"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.emailAdmin.touched && labelForm.controls.emailAdmin.invalid"
+                  >Email admin <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.emailAdmin.touched && labelForm.controls.emailAdmin.invalid)"
+                  >Email admin <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input [type]="'email'" formControlName="emailAdmin" [(ngModel)]="requestSelected.projet.emailAdmin"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.loginAdmin.touched && labelForm.controls.loginAdmin.invalid"
+                  >Login admin <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.loginAdmin.touched && labelForm.controls.loginAdmin.invalid)"
+                  >Login admin <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input formControlName="loginAdmin" [(ngModel)]="requestSelected.projet.loginAdmin"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Type d'application :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-select
+                          [(ngModel)]="requestSelected.projet.application"
+                          [placeholder]="''"
+                          [options]="environnement?.application"
+                          formControlName="application"
+                  ></tc-select>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Owner :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-select
+                          [(ngModel)]="requestSelected.projet.owner"
+                          [placeholder]="''"
+                          [options]="environnement?.owner"
+                          formControlName = "owner"
+                  ></tc-select>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Business_unit :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-select
+                          [(ngModel)]="requestSelected.projet.businessunit"
+                          [placeholder]="''"
+                          [options]="environnement?.businessunit"
+                          formControlName="businessunit"
+                  ></tc-select>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Criticité :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-select
+                          [(ngModel)]="requestSelected.projet.criticity"
+                          [placeholder]="''"
+                          [options]="environnement?.criticity"
+                          formControlName = "criticity"
+                  ></tc-select>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Backup :</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-select
+                          [(ngModel)]="requestSelected.projet.backup"
+                          [placeholder]="''"
+                          [options]="environnement?.backup"
+                          formControlName="backup"
+                  ></tc-select>
+                </div>
+              </div>
+            </tc-form-group>
+
+          </tc-card>
+        </div>
+        <div class="col-12 col-xl-4">
+          <tc-card [title]="'Ressource Quotas'">
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.cpu.touched && labelForm.controls.cpu.invalid"
+                  >CPU <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.cpu.touched && labelForm.controls.cpu.invalid)"
+                  >CPU <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input [suffix]="['cores']" formControlName="cpu" [(ngModel)]="requestSelected.ressource.cpu"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.memory.touched && labelForm.controls.memory.invalid"
+                  >Mémoire <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.memory.touched && labelForm.controls.memory.invalid)"
+                  >Mémoire <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input [suffix]="['Gi']" formControlName="memory" [(ngModel)]="requestSelected.ressource.memory"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.storage.touched && labelForm.controls.storage.invalid"
+                  >Stockage <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.storage.touched && labelForm.controls.storage.invalid)"
+                  >Stockage <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input [suffix]="['Gi']" formControlName="storage" [(ngModel)]="requestSelected.ressource.storage"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+
+            <tc-form-group>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                          [tcColor]="'#e24d4d'"
+                          *ngIf="labelForm.controls.nbEnv.touched && labelForm.controls.nbEnv.invalid"
+                  >Nombre d'environnement [1-4] <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+
+                  <tc-form-label
+                          class="mb-md-0"
+                          *ngIf="!(labelForm.controls.nbEnv.touched && labelForm.controls.nbEnv.invalid)"
+                  >Nb environnements [1-4] <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input [type]="'number'" formControlName="nbEnv"  [readonly]="true" [(ngModel)]="requestSelected.nbEnv"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+            <tc-form-group *ngFor="let env of envs; index as i">
+              <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-md-right">
+                  <tc-form-label
+                          class="mb-md-0"
+                  >Env {{i+1}} <sup [tcColor]="'#e24d4d'">*</sup>:</tc-form-label>
+                </div>
+
+                <div class="col-12 col-md-8">
+                  <tc-input  [ngModel]="env" formControlName="env{{i}}" [readonly]="true"></tc-input>
+                </div>
+              </div>
+            </tc-form-group>
+          </tc-card>
+
+
+          <button
+                  tc-button
+                  [view]="'info'"
+                  [beforeIcon]="'icofont-location-arrow'"
+                  [disabled]="labelForm.invalid"
+                  [load]="loadingLabelForm"
+          >
+            Envoyer
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+
+  </ng-template>
+</ng-container>

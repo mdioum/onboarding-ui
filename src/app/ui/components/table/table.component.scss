@@ -1,0 +1,221 @@
+@import '../../../../assets/sass/variables';
+
+$_module-rem: $module-rem;
+$_bg: #fff;
+$_border-color: #f3f3f3;
+$_border-width: 1px;
+$_td-border-color: #f3f3f3;
+$_td-border-width: 1px;
+$_header-bg: rgba(main-palette(500), 0.1);
+$_header-color: rgba(main-palette(500), 0.8);
+$_striped-bg: rgba(main-palette(500), 0.04);
+$_hovered-bg: rgba(main-palette(500), 0.06);
+
+$_shape: $shape;
+$_animation: $animation;
+$_shadow: 2px 1px 4px 0 rgba(0, 0, 0, 0.08);;
+
+:host {
+  display: block;
+  margin: 0;
+  padding: 0;
+
+  .table-wrap {
+    overflow: auto;
+
+    .table-box {
+      border-color: $_td-border-color;
+      border-radius: $_shape;
+      overflow: auto;
+      width: 100%;
+
+      .col-wrapper {
+        display: flex;
+        margin: 0 (-$_module-rem / 2);
+
+        .sorting {
+          display: flex;
+          flex-direction: column;
+          font-size: 0.9em;
+          justify-content: center;
+          margin: -3px ($_module-rem / 2);
+
+          .up,
+          .down {
+            color: main-palette(500);
+            cursor: pointer;
+            opacity: .4;
+            transition: opacity 0.2s $_animation;
+
+            &:hover,
+            &.active {
+              opacity: 1;
+            }
+          }
+        }
+        .title,
+        .search-box {
+          margin: 0 ($_module-rem / 2);
+        }
+        .search-box {
+          width: 100%;
+
+          .tc-input {
+            min-width: 100px;
+          }
+        }
+        &.sorting-col {
+          .title {
+            cursor: pointer;
+          }
+        }
+      }
+      tr {
+        transition:
+          background 0.2s $_animation, border 0.2s $_animation,
+          box-shadow 0.2s $_animation, color 0.2s $_animation;
+        will-change: background, border, box-shadow, color;
+        width: 100%;
+        &:last-child {
+          border-radius: 0 0 $_shape $_shape;
+        }
+        th,
+        td {
+          border: 0;
+          border-bottom: $_td-border-width solid $_td-border-color;
+          padding: $_module-rem  ($_module-rem * 1.5);
+          transition: background 0.2s $_animation;
+
+          &:first-child {
+            padding-left: $_module-rem * 3;
+          }
+          &:last-child {
+            padding-right: $_module-rem * 3;
+          }
+        }
+        th {
+          background: $_header-bg;
+          color: $_header-color;
+          position: relative;
+
+          &.empty-th {
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+        td {
+          background: $_bg;
+        }
+      }
+      tbody {
+        tr {
+          &:last-child {
+            th,
+            td {
+              // border-bottom: none;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.hovered-table {
+    .table-wrap {
+      .table-box {
+        tbody {
+          tr {
+            &:hover {
+              td {
+                background: $_hovered-bg;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &.bordered-table {
+    .table-wrap {
+      .table-box {
+        thead,
+        tbody {
+          tr {
+            td,
+            th {
+              border: $_border-width solid $_border-color;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.striped-table {
+    .table-wrap {
+      .table-box {
+        tbody {
+          tr {
+            &:nth-child(even) {
+              th,
+              td {
+                background: $_striped-bg;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &.borderless-table {
+    .table-wrap {
+      .table-box {
+        thead,
+        tbody {
+          tr {
+            td,
+            th {
+              border: 0 none;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.item-list {
+    .table-wrap {      
+      .table-box {
+        padding: 0 2px;
+        border-collapse: separate;
+        border-spacing: 0 $module-rem;
+
+        thead {
+          tr {
+            box-shadow: none;
+            th {
+              box-shadow: none;
+              background: none;
+            }
+          }
+        }
+        tbody {
+          tr {
+            box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
+
+            td {
+              margin-top: $_module-rem / 2;
+              margin-bottom: $_module-rem / 2;
+
+              &:first-child { 
+                border-top-left-radius: $_shape;
+                border-bottom-left-radius: $_shape;
+              }
+              &:last-child {
+                border-top-right-radius: $_shape;
+                border-bottom-right-radius: $_shape;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

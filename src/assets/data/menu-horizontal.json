@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Nouvelles demandes",
+    "routing": "request-new"
+  },
+  {
+    "title": "Demandes acceptées",
+    "routing": "request-accepted"
+  },
+  {
+    "title": "Demandes rejetées",
+    "routing": "request-rejected"
+  }
+]

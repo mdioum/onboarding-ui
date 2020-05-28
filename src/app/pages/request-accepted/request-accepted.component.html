@@ -1,0 +1,152 @@
+<tc-card class="mb-0" [title]="''" [padding]="'20px 0'" *ngIf="requetes">
+  <tc-table [rows]="requetes" [pagination]="true" [itemsPerPage]="10" [hovered]="true" [search]="true" *ngIf="requetes">
+    <tc-table-col [columnTitle]="'Entité'" [columnName]="'entite'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'Structure'" [columnName]="'structure'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'Projet'" [columnName]="'projet'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'CPU'" [columnName]="'cpu'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" >{{ value?.ressource?.cpu + ' core ' + '(used: ' + getCPUUsed(value?.ressource) + '%)' }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Mémoire'" [columnName]="'memory'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" >{{ value?.ressource?.memory + ' (used: ' + getMemoryUsed(value?.ressource) + '%)' }}</span>
+      </ng-template>
+    </tc-table-col>
+
+    <tc-table-col [columnTitle]="'Disque'" [columnName]="'storage'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" >{{ value?.ressource?.storage + ' (used: ' + getStorageUsed(value?.ressource) + '%)' }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Détail'" [columnName]="'info'">
+      <ng-template #tableTDTemplate let-value>
+        <button
+                tc-button
+                [view]="'info'"
+                (click)="openModal(modalBody, 'Détail', null, { width: '100%', closeButton: true, overlayClose: false }); requete = value"
+        >
+          info
+        </button>
+      </ng-template>
+    </tc-table-col>
+  </tc-table>
+</tc-card>
+
+
+
+<ng-container>
+  <ng-template #modalHeader>
+    <h2 class="title">Modal title</h2>
+    <div class="actions">
+      <tc-badge [view]="'warning'">Détail</tc-badge>
+    </div>
+  </ng-template>
+
+  <ng-template #modalBody>
+    <tc-card [title]="requete?.demandeur?.entite+' - '+requete?.demandeur?.structure" [align]="'center'" class="mb-md-0">
+      <div class="row">
+        <div class="col-8 col-md-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="mr-2" [tcFontSize]="30" [tcColor]="'#6e40d8'">{{requete?.ressource?.cpu}}</div>
+            <div [tcColor]="'#8f8f90'">
+              <div [tcFontSize]="10">Cores</div>
+              <div>CPU</div>
+            </div>
+            &nbsp;&nbsp;
+            <tc-circle-progress *ngIf="requete?.ressource" [size]="'70px'" [fontSize]="14" [strokeWidth]="2" [value]="getCPUUsed(requete?.ressource)"></tc-circle-progress>
+          </div>
+        </div>
+        <div class="col-8 col-md-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="mr-2" [tcFontSize]="30" [tcColor]="'#6e40d8'">{{getMemory(requete?.ressource?.memory)}}</div>
+            <div [tcColor]="'#8f8f90'">
+              <div [tcFontSize]="10">Gi</div>
+              <div>Memory</div>
+            </div>
+            &nbsp;&nbsp;
+            <tc-circle-progress *ngIf="requete?.ressource" [size]="'70px'" [strokeWidth]="2" [strokeWidth]="2" [value]="getMemoryUsed(requete?.ressource)"></tc-circle-progress>
+          </div>
+        </div>
+
+        <div class="col-8 col-md-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="mr-2" [tcFontSize]="30" [tcColor]="'#6e40d8'">{{getMemory(requete?.ressource?.storage)}}</div>
+            <div [tcColor]="'#8f8f90'">
+              <div [tcFontSize]="10">Gi</div>
+              <div>Disque</div>
+            </div>
+            &nbsp;&nbsp;
+            <tc-circle-progress *ngIf="requete?.ressource" [size]="'70px'" [strokeWidth]="2" [strokeWidth]="2" [value]="getStorageUsed(requete?.ressource)"></tc-circle-progress>
+          </div>
+        </div>
+      </div>
+
+
+      <hr class="mt-4 mb-4">
+
+      <tc-badge [outline]="true" [view]="'info'">Projet <br>{{requete?.projet?.nom}}</tc-badge>
+
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <ul class="list-unstyled text-left">
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">{{requete?.demandeur?.prenom}} {{requete?.demandeur?.nom}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">{{requete?.demandeur?.telephone}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">{{requete?.demandeur?.email}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Business unit : {{requete?.projet?.businessunit}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Application : {{requete?.projet?.application}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Criticité : {{requete?.projet?.criticity}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Backup : {{requete?.projet?.backup}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Username admin : {{requete?.projet?.loginAdmin}}</span>
+            </li>
+            <li class="d-flex align-items-center pt-2 pb-2">
+              <tc-icon [iconClass]="'icofont-check-circled'" [tcColor]="'#8f8f90'"></tc-icon>
+              <span class="ml-1">Email admin : {{requete?.projet?.emailAdmin}}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-6" *ngIf="requete?.environnements">
+          <tc-card [title]="'Environnements'" [padding]="0">
+            <tc-list [timeline]="true">
+              <tc-list-item *ngFor="let env of requete?.environnements">
+                <tc-icon
+                        tc-list-icon
+                        [padding]="'7px'"
+                        [tcShape]="500"
+                        [iconClass]="'icofont-paper-plane'"
+                        [tcColor]="'#fff'"
+                        [tcBgColor]="'#4a505c'"
+                ></tc-icon>
+                <span tc-list-line>{{env}}</span>
+              </tc-list-item>
+            </tc-list>
+          </tc-card>
+        </div>
+      </div>
+    </tc-card>
+  </ng-template>
+</ng-container>
